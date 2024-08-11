@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JRE 下載頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .download-box {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .download-link {
+            font-size: 18px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .download-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>JRE 版本下載</h1>
+    <p>系統已偵測您的作業系統及位元架構，請點擊下方對應的連結進行JRE下載並安裝。</p>
+    
+    <div class="download-box">
+        <p id="download-message">偵測中...</p>
+        <a id="download-link" class="download-link" href="#" download>下載JRE</a>
+    </div>
+
+    <script>
+        function detectOS() {
+            let platform = navigator.platform.toLowerCase();
+            let os = "unknown";
+            let bitVersion = "32";
+
+            if (platform.includes('win')) {
+                os = "Windows";
+                bitVersion = (navigator.userAgent.indexOf("WOW64") !== -1 || navigator.userAgent.indexOf("Win64") !== -1) ? "64" : "32";
+            } else if (platform.includes('mac')) {
+                os = "macOS";
+                bitVersion = "64"; // macOS 通常都是 64 位元
+            } else if (platform.includes('linux')) {
+                os = "Linux";
+                bitVersion = (navigator.userAgent.indexOf("x86_64") !== -1) ? "64" : "32";
+            }
+
+            return { os: os, bitVersion: bitVersion };
+        }
+
+        function displayDownloadLink() {
+            let osInfo = detectOS();
+            let message = `您使用的作業系統是 ${osInfo.os} ${osInfo.bitVersion} 位元。`;
+            let downloadUrl = "#";
+
+            if (osInfo.os === "Windows") {
+                if (osInfo.bitVersion === "64") {
+                    downloadUrl = "https://example.com/jre_windows_64bit.exe";
+                } else {
+                    downloadUrl = "https://example.com/jre_windows_32bit.exe";
+                }
+            } else if (osInfo.os === "macOS") {
+                downloadUrl = "https://example.com/jre_mac.dmg";
+            } else if (osInfo.os === "Linux") {
+                downloadUrl = "https://example.com/jre_linux.tar.gz";
+            } else {
+                message = "無法偵測您的作業系統，請手動選擇下載對應版本。";
+                downloadUrl = "https://example.com/jre_download_page";
+            }
+
+            document.getElementById("download-message").innerText = message;
+            document.getElementById("download-link").setAttribute("href", downloadUrl);
+        }
+
+        window.onload = displayDownloadLink;
+    </script>
+</body>
+</html>
